@@ -2,7 +2,13 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-// Scene, Camera, Renderer
+// Import Modules
+import { setupBackground } from './objects/bg.js';
+import { createIsland } from './objects/island.js';
+import { animateClouds } from './objects/clouds.js';
+
+// 🎨 === INITIAL SETUP ===
+// Scene, Camera, and Renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -10,51 +16,48 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create Floating Island (Box for now)
-const geometry = new THREE.BoxGeometry(5, 1, 5);
-const material = new THREE.MeshStandardMaterial({
-  color: 0x00ff00, // Green
-  roughness: 0.5, // Slightly shiny
-  metalness: 0.1, // A bit of reflection
-});
-const island = new THREE.Mesh(geometry, material);
-island.position.y = 0.5;
-scene.add(island);
+// 🎮 === ORBIT CONTROLS ===
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Smooth camera rotation
+controls.dampingFactor = 0.1;
+controls.minDistance = 5;
+controls.maxDistance = 50;
+controls.maxPolarAngle = Math.PI / 2; // Lock rotation to prevent looking below
+camera.position.set(10, 15, 20);
 
-// Add Light
+// 💡 === LIGHT SETUP ===
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 10, 10).normalize();
+light.position.set(10, 10, 5).normalize(); // Position light source
 scene.add(light);
 
-// 🌟 Add Ambient Light for Uniform Lighting
-const ambientLight = new THREE.AmbientLight(0x404040, 2); // Color, Intensity
+// Ambient Light for Uniform Illumination
+const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft global light
 scene.add(ambientLight);
 
-// Position Camera
-camera.position.set(10, 10, 20);
+// 🌌 === BACKGROUND SETUP ===
+setupBackground(scene);
 
-// 🕹️ Add Orbit Controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Smooth rotation
-controls.dampingFactor = 0.25;
-controls.screenSpacePanning = false;
-controls.minDistance = 5; // Minimum zoom in
-controls.maxDistance = 50; // Maximum zoom out
-controls.maxPolarAngle = Math.PI / 2; // Restrict rotation to above
+// 🏝️ === ADD FLOATING ISLAND ===
+const island = createIsland();
+scene.add(island);
 
-// Animation Loop
+// ☁️ === CLOUD PLACEHOLDER ===
+let clouds = []; // Empty array, add cloud logic later
+
+// 🎥 === ANIMATION LOOP ===
 function animate() {
   requestAnimationFrame(animate);
-  controls.update(); // Update controls per frame
+  controls.update(); // Update controls smoothly
+  animateClouds(clouds); // Optional, for later cloud animations
   renderer.render(scene, camera);
 }
 animate();
 
-// Handle Window Resize
+// 🎯 === HANDLE WINDOW RESIZE ===
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;

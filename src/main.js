@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // Import Modules
 import { setupBackground } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
-import { animateClouds } from './objects/clouds.js';
+import { createClouds, animateClouds } from './objects/clouds.js';
 
 // 🎨 === INITIAL SETUP ===
 // Scene, Camera, and Renderer
@@ -27,15 +27,16 @@ controls.dampingFactor = 0.1;
 controls.minDistance = 5;
 controls.maxDistance = 50;
 controls.maxPolarAngle = Math.PI / 2; // Lock rotation to prevent looking below
-camera.position.set(10, 15, 20);
+camera.position.set(10, 15, 25); // Closer to the island for a better view
 
 // 💡 === LIGHT SETUP ===
+// Directional Light for Sunlight Effect
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 10, 5).normalize(); // Position light source
+light.position.set(10, 20, 10).normalize();
 scene.add(light);
 
 // Ambient Light for Uniform Illumination
-const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft global light
+const ambientLight = new THREE.AmbientLight(0x404040, 2);
 scene.add(ambientLight);
 
 // 🌌 === BACKGROUND SETUP ===
@@ -45,17 +46,18 @@ setupBackground(scene);
 const island = createIsland();
 scene.add(island);
 
-// ☁️ === CLOUD PLACEHOLDER ===
-let clouds = []; // Empty array, add cloud logic later
+// ☁️ === ADD CLOUDS ===
+let clouds = []; // Array to hold cloud meshes
+createClouds(scene, clouds); // Create cloud objects and push to array
 
 // 🎥 === ANIMATION LOOP ===
 function animate() {
   requestAnimationFrame(animate);
-  controls.update(); // Update controls smoothly
-  animateClouds(clouds); // Optional, for later cloud animations
+  controls.update(); // Smooth camera control
+  animateClouds(clouds); // Animate cloud movement
   renderer.render(scene, camera);
 }
-animate();
+animate(); // Start animation loop
 
 // 🎯 === HANDLE WINDOW RESIZE ===
 window.addEventListener('resize', () => {

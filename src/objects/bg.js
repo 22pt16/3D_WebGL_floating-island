@@ -51,43 +51,73 @@ function createSun(scene) {
   createMoon(scene);
 }
 
-// 🌙 === MOON CREATION (Fake Crescent Using Alpha Blending) ===
-function createMoon(scene) {
-  // 🌓 Main Moon Geometry (Sphere)
-  const moonGeometry = new THREE.SphereGeometry(8, 32, 32);
-  const moonMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      crescentCenter: { value: new THREE.Vector2(0.2, 0.5) }, // Controls crescent position
-      crescentRadius: { value: 0.4 }, // Controls crescent size
-      glowColor: { value: new THREE.Color(0xdcdcdc) }, // Soft pale glow
-    },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv; // Pass UV coordinates to fragment shader
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform vec2 crescentCenter;
-      uniform float crescentRadius;
-      uniform vec3 glowColor;
-      varying vec2 vUv;
 
-      void main() {
-        float dist = distance(vUv, crescentCenter); // Distance from center
-        float alpha = smoothstep(crescentRadius + 0.05, crescentRadius, dist); // Smooth edge
-        gl_FragColor = vec4(glowColor, alpha); // Apply crescent glow with alpha
-      }
-    `,
-    transparent: true, // Allows blending for crescent effect
+// 🌙 === CREATE GLOWING MOON WITH DYNAMIC GLOW EFFECT ===
+function createMoon(scene) {
+  // 🌕 Main Moon Geometry
+  const moonGeometry = new THREE.SphereGeometry(8, 32, 32);
+  const moonMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff, // Bright white moon
+    emissive: 0xaaaaff, // Soft blue glow effect
+    emissiveIntensity: 1.5, // Moon glow intensity
+    roughness: 0.2,
+    metalness: 0.1,
   });
 
+  // 🌕 Main Moon Mesh
   moon = new THREE.Mesh(moonGeometry, moonMaterial);
   moon.position.set(0, 30, -60);
-  moon.visible = false; // Hide moon initially
+  moon.visible = false; // Hide initially
   scene.add(moon);
+
+  // ✨ === CREATE GLOW TEXTURE FROM CANVAS ===
+  const glowTexture = createMoonGlowTexture(); // Generate texture dynamically
+  const glowMaterial = new THREE.SpriteMaterial({
+    map: glowTexture,
+    transparent: true,
+    opacity: 0.7, // Soft opacity for realistic glow
+    blending: THREE.AdditiveBlending, // Enhance glow
+  });
+
+  // 🔥 === GLOW SPRITE AS AURA AROUND MOON ===
+  const glowSprite = new THREE.Sprite(glowMaterial);
+  glowSprite.scale.set(20, 20, 1); // Slightly larger than moon
+  moon.add(glowSprite); // Add glow to follow moon rotation
 }
+
+// ✨ === CREATE CANVAS-BASED GLOW TEXTURE ===
+function createMoonGlowTexture() {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 256; // High-res glow
+  canvas.width = size;
+  canvas.height = size;
+
+  // 🎨 Radial Gradient like the Original
+  const gradient = ctx.createRadialGradient(
+    size / 2,
+    size / 2,
+    0,
+    size / 2,
+    size / 2,
+    size / 2
+  );
+
+  gradient.addColorStop(0, '#ffffe0'); // Soft yellow-white center
+  gradient.addColorStop(0.5, '#aaaaff'); // Cool glow at mid
+  gradient.addColorStop(1, 'transparent'); // Fades out at edges
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+
+  // 📸 Create Texture from Canvas
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+
+
 
 // 🌗 === TOGGLE DAY AND NIGHT MODE ===
 export function toggleSunMoon(scene) {
@@ -146,26 +176,6 @@ function createNightBackground(ctx, canvas) {
     ctx.fill();
   }
 
-  // 🌙 === ADD MOON GLOW EFFECT ===
-  ctx.beginPath();
-  const moonX = canvas.width * 0.7; // Moon to the right
-  const moonY = canvas.height * 0.2; // Moon higher in the sky
-  const moonRadius = 80;
-  const moonGradient = ctx.createRadialGradient(
-    moonX,
-    moonY,
-    0,
-    moonX,
-    moonY,
-    moonRadius
-  );
-
-  moonGradient.addColorStop(0, '#ffffe0'); // Soft yellow-white glow
-  moonGradient.addColorStop(0.5, '#aaaaff'); // Cool glow at mid
-  moonGradient.addColorStop(1, 'transparent'); // Transparent at edges
-  ctx.fillStyle = moonGradient;
-  ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2);
-  ctx.fill();
 }
 
 // 📏 === HANDLE WINDOW RESIZE ===

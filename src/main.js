@@ -1,11 +1,16 @@
 // Import Three.js and OrbitControls
 import * as THREE from 'three';
+import gsap from 'gsap';
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Import Modules
 import { setupBackground } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
+import { Unicorn } from './objects/unicorn.js';
+
+
 
 
 // 🎨 === INITIAL SETUP ===
@@ -47,6 +52,13 @@ setupBackground(scene);
 const island = createIsland();
 scene.add(island);
 console.log('Island added:', island);
+
+
+// 🦄 === ADD UNICORN ===
+const unicorn = new Unicorn();
+unicorn.addToScene(scene);
+unicorn.animateOrbit();
+unicorn.updateUnicornFlight();
 
 
 // ☁️ === ADD CLOUDS ===

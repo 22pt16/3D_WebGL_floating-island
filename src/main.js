@@ -8,6 +8,7 @@ import { setupBackground, handleResize, toggleSunMoon } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
+import { createMountains } from './objects/mountains.js';
 
 
 
@@ -58,6 +59,10 @@ if (island) {
 }
 
 
+// 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===
+const mountains = createMountains(scene);
+scene.add(mountains);
+console.log('🏔️ Mountains added:', mountains);
 
 // 🦄 === ADD UNICORN ===
 const unicorn = new Unicorn();

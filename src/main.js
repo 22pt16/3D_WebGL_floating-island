@@ -12,9 +12,9 @@ import { createClouds, animateClouds } from './objects/clouds.js';
 // Scene, Camera, and Renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  75,
+  30,
   window.innerWidth / window.innerHeight,
-  0.1,
+  0.2,
   1000
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -26,9 +26,9 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Smooth camera rotation
 controls.dampingFactor = 0.1;
 controls.minDistance = 5;
-controls.maxDistance = 50;
+controls.maxDistance = 80;
 controls.maxPolarAngle = Math.PI / 2; // Lock rotation to prevent looking below
-camera.position.set(10, 15, 25); // Closer to the island for a better view
+camera.position.set(35, 10, 18); // Closer to the island for a better view
 
 // 💡 === LIGHT SETUP ===
 // Directional Light for Sunlight Effect

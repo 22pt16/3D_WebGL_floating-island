@@ -26,43 +26,41 @@ export function createIsland() {
   const islandGroup = new THREE.Group();
 
   // --- 🟤 Ground (Earth Part)
-  const geoGround = new THREE.CylinderGeometry(7, 2, 9, 12, 5);
-  jitter(geoGround, 0.6);
+  const geoGround = new THREE.CylinderGeometry(9, 3, 13, 12, 5);
+  jitter(geoGround, 0.85);
   geoGround.applyMatrix4(new THREE.Matrix4().makeTranslation(0, -0.5, 0)); // ✅ Corrected translate
   const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x664e31, flatShading: true });
   const earth = new THREE.Mesh(geoGround, earthMaterial);
   islandGroup.add(earth);
 
   // --- 🌿 Green Top Layer
-  const geoGreen = new THREE.CylinderGeometry(7.4, 5.5, 3.7, 30, 2);
-  jitter(geoGreen, 0.2);
+  const geoGreen = new THREE.CylinderGeometry(8.5, 6, 7.5, 50, 2);
+  jitter(geoGreen, 0.3);
   geoGreen.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 3.1, 0)); // ✅ Corrected translate
   const greenMaterial = new THREE.MeshPhongMaterial({ color: 0x379351, flatShading: true });
   const green = new THREE.Mesh(geoGreen, greenMaterial);
   islandGroup.add(green);
 
   // --- 🪨 Add Small Rocks Around the Island
-  for (let i = 0; i < 5; i++) {
-    const geoRock = new THREE.DodecahedronGeometry(randomize(0.5, 1.5), 0);
+  for (let i = 0; i < 30; i++) {
+    const geoRock = new THREE.DodecahedronGeometry(randomize(0.6, 1.5), 0);
     const stoneMaterial = new THREE.MeshLambertMaterial({ color: 0x9eaeac });
     const rock = new THREE.Mesh(geoRock, stoneMaterial);
-    rock.position.set(randomize(-5, 5, true), randomize(-4, -1, true), randomize(-2, 2, true));
-    rock.scale.set(randomize(0.8, 1.2, true), randomize(0.5, 3, true), 1);
+
+    rock.position.set(randomize(-5, 5.5, true), 
+                      randomize(-5, 2, true),
+                      randomize(-2, 2, true));
+
+    // Random rotation for realism
+    rock.rotation.x = randomize(0, Math.PI, true);
+    rock.rotation.y = randomize(0, Math.PI, true);
+    rock.rotation.z = randomize(0, Math.PI, true);
+
+    rock.scale.set(randomize(0.8, 1.2, true), 
+                  randomize(0.5, 3, true), 1);
     islandGroup.add(rock);
   }
 
-  // --- ☁️ Add Floating Clouds
-  const cloudGeo = new THREE.SphereGeometry(2, 6, 6);
-  jitter(cloudGeo, 0.2);
-  const cloudMaterial = new THREE.MeshPhongMaterial({ color: 0xdef9ff, transparent: true, opacity: 0.8 });
-  const cloud1 = new THREE.Mesh(cloudGeo, cloudMaterial);
-  cloud1.position.set(-5, 8, -4.6);
-  islandGroup.add(cloud1);
-
-  const cloud2 = cloud1.clone();
-  cloud2.position.set(6, -9, 4);
-  cloud2.scale.set(1.2, 1.2, 1.2);
-  islandGroup.add(cloud2);
 
   // 🔥 === SHADOW SUPPORT ===
   islandGroup.traverse((object) => {
@@ -72,6 +70,7 @@ export function createIsland() {
     }
   });
 
-  islandGroup.position.y = -5.6; // ✅ Lower the island slightly
+  islandGroup.scale.set(1.5, 1.1, 1.5); // Scale up by 1.5x
+  islandGroup.position.y = -5.2; // Lower the island slightly
   return islandGroup;
 }

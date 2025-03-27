@@ -5,11 +5,10 @@ import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Import Modules
-import { setupBackground } from './objects/bg.js';
+import { setupBackground, handleResize } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
-
 
 
 
@@ -24,14 +23,15 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
 // 🎮 === ORBIT CONTROLS ===
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Smooth camera rotation
 controls.dampingFactor = 0.1;
-controls.minDistance = 5;
-controls.maxDistance = 80;
+controls.minDistance = 2; // Min Zoom-out distance
+controls.maxDistance = 150; // Max FAR Zoom-out distance
 controls.maxPolarAngle = Math.PI / 2; // Lock rotation to prevent looking below
 camera.position.set(35, 10, 18); // Closer to the island for a better view
 
@@ -46,7 +46,7 @@ const ambientLight = new THREE.AmbientLight(0x404040, 2);
 scene.add(ambientLight);
 
 // 🌌 === BACKGROUND SETUP ===
-setupBackground(scene);
+setupBackground(scene, renderer, camera);
 
 // 🏝️ === ADD FLOATING ISLAND ===
 const island = createIsland();
@@ -60,23 +60,18 @@ unicorn.addToScene(scene);
 unicorn.animateOrbit();
 unicorn.updateUnicornFlight();
 
-
 // ☁️ === ADD CLOUDS ===
 let clouds = []; // Array to hold cloud meshes
 createClouds(scene, clouds); // Create cloud objects and push to array
 
 // 🎥 === ANIMATION LOOP ===
-function animate() {
-  requestAnimationFrame(animate);
+function animateMain() {
+  requestAnimationFrame(animateMain);
   controls.update(); // Smooth camera control
   animateClouds(clouds); // Animate cloud movement
   renderer.render(scene, camera);
 }
-animate(); // Start animation loop
+animateMain(); // Start animation loop
 
-// 🎯 === HANDLE WINDOW RESIZE ===
-window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-});
+// 📏 === HANDLE WINDOW RESIZE ===
+handleResize(scene, renderer, camera);

@@ -102,3 +102,22 @@ body {
 canvas {
   display: block;
 }
+
+#toggleButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  background-color: #ffdd57;
+  border: none;
+  border-radius: 8px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+#toggleButton:hover {
+  background-color: #f5c000;
+}

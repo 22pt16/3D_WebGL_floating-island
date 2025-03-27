@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Import Modules
-import { setupBackground, handleResize } from './objects/bg.js';
+import { setupBackground, handleResize, toggleSunMoon } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 
@@ -42,6 +42,7 @@ scene.add(ambientLight);
 
 // 🌌 === BACKGROUND SETUP ===
 setupBackground(scene, renderer, camera);
+handleResize(scene, renderer, camera);
 
 // 🏝️ === ADD FLOATING ISLAND ===
 const island = createIsland();
@@ -63,3 +64,12 @@ animateMain(); // Start animation loop
 
 // 📏 === HANDLE WINDOW RESIZE ===
 handleResize(scene, renderer, camera);
+
+
+// 🎮 === ADD EVENT LISTENER FOR TOGGLE BUTTON
+const toggleButton = document.getElementById('toggleButton');
+toggleButton.addEventListener('click', () => {
+  toggleSunMoon(scene); // Toggle Sun/Moon
+  isDay = !isDay; // Invert the current mode
+  toggleButton.innerHTML = isDay ? '🌞 Switch to Night' : '🌙 Switch to Day';
+});

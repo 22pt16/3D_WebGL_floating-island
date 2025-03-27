@@ -59,7 +59,11 @@ export function createIsland() {
     rock.scale.set(randomize(0.8, 1.2, true), 
                   randomize(0.5, 3, true), 1);
     islandGroup.add(rock);
+
   }
+    // 🌱 Add Bushes and Grass on Top
+    console.log("🌱 Adding Bushes and Grass!");
+    addBushesAndGrass(islandGroup);
 
 
   // 🔥 === SHADOW SUPPORT ===
@@ -74,3 +78,30 @@ export function createIsland() {
   islandGroup.position.y = -5.2; // Lower the island slightly
   return islandGroup;
 }
+
+// 🌱 === ADD BUSHES AND GRASS ===
+const addBushesAndGrass = (islandGroup) => {
+  const bushMaterial = new THREE.MeshLambertMaterial({ color: 0x4c9c2e }); // Natural Green
+
+  for (let i = 0; i < 50; i++) {
+    const bushSize = randomize(0.4, 0.9, true);
+    const geoBush = new THREE.SphereGeometry(bushSize, 6, 6); // Spherical bushes
+    const bush = new THREE.Mesh(geoBush, bushMaterial);
+
+    // Randomize bush position on top layer
+    const angle = Math.random() * Math.PI * 2;
+    const radius = randomize(3.2, 6.8, true);
+    bush.position.set(
+      Math.cos(angle) * radius,
+      7 + Math.random() * 0.2, // Slight variation in height
+      Math.sin(angle) * radius
+    );
+
+    bush.rotation.y = Math.random() * Math.PI;
+    bush.scale.set(bushSize * 2, bushSize * 3, bushSize * 2); // Bigger bush!
+    islandGroup.add(bush);
+    console.log(`🌱 Bush #${i + 1} Added at:`, bush.position);
+
+  }
+  
+};

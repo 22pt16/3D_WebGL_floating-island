@@ -1,6 +1,5 @@
 // Import Three.js and OrbitControls
 import * as THREE from 'three';
-import gsap from 'gsap';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -46,13 +45,18 @@ const ambientLight = new THREE.AmbientLight(0x404040, 2);
 scene.add(ambientLight);
 
 // 🌌 === BACKGROUND SETUP ===
-setupBackground(scene, renderer, camera);
+setupBackground(scene);
 handleResize(scene, renderer, camera);
 
 // 🏝️ === ADD FLOATING ISLAND ===
 const island = createIsland();
 scene.add(island);
-console.log('Island added:', island);
+if (island) {
+  console.log('✅ Island loaded successfully!');
+} else {
+  console.error('❌ Island failed to load!');
+}
+
 
 
 // 🦄 === ADD UNICORN ===

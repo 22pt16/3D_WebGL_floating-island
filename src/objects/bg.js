@@ -141,6 +141,9 @@ export function toggleSunMoon(scene) {
     sunLight.intensity = 1.2; // Dimmer glow for moonlight
     ambientLight.intensity = 0.2; // Less ambient for night
     createNightBackground(ctx, canvas);
+
+    document.getElementById('toggleButton').innerHTML = 'Switch to Day 🌞';
+
   }
 
   // 🌌 Update Background Texture

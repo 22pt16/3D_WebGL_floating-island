@@ -79,9 +79,6 @@ handleResize(scene, renderer, camera);
 
 
 // 🎮 === ADD EVENT LISTENER FOR TOGGLE BUTTON
-const toggleButton = document.getElementById('toggleButton');
-toggleButton.addEventListener('click', () => {
-  toggleSunMoon(scene); // Toggle Sun/Moon
-  isDay = !isDay; // Invert the current mode
-  toggleButton.innerHTML = isDay ? '🌞 Switch to Night' : '🌙 Switch to Day';
+document.getElementById('toggleButton').addEventListener('click', () => {
+  toggleSunMoon(scene);
 });

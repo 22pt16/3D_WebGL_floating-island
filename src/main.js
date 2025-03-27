@@ -7,6 +7,7 @@ import { setupBackground } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 
+
 // 🎨 === INITIAL SETUP ===
 // Scene, Camera, and Renderer
 const scene = new THREE.Scene();
@@ -45,6 +46,8 @@ setupBackground(scene);
 // 🏝️ === ADD FLOATING ISLAND ===
 const island = createIsland();
 scene.add(island);
+console.log('Island added:', island);
+
 
 // ☁️ === ADD CLOUDS ===
 let clouds = []; // Array to hold cloud meshes

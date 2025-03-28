@@ -1,6 +1,5 @@
 // Import Three.js and OrbitControls
 import * as THREE from 'three';
-
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Import Modules
@@ -8,8 +7,6 @@ import { setupBackground, handleResize, toggleSunMoon } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
-
-
 
 // 🎨 === INITIAL SETUP ===
 // Scene, Camera, and Renderer
@@ -38,6 +35,7 @@ camera.position.set(35, 10, 18); // Closer to the island for a better view
 // Directional Light for Sunlight Effect
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(10, 20, 10).normalize();
+light.castShadow = true; // Enable shadows for the light
 scene.add(light);
 
 // Ambient Light for Uniform Illumination
@@ -57,23 +55,36 @@ if (island) {
   console.error('❌ Island failed to load!');
 }
 
-
-
 // 🦄 === ADD UNICORN ===
 const unicorn = new Unicorn();
 unicorn.addToScene(scene);
-unicorn.animateOrbit();
-unicorn.updateUnicornFlight();
 
 // ☁️ === ADD CLOUDS ===
 let clouds = []; // Array to hold cloud meshes
 createClouds(scene, clouds); // Create cloud objects and push to array
 
 // 🎥 === ANIMATION LOOP ===
+// Initialize time for delta calculation
+let lastTime = performance.now();
+
 function animateMain() {
   requestAnimationFrame(animateMain);
+
+  // Calculate delta time
+  const currentTime = performance.now();
+  const delta = (currentTime - lastTime) / 1000; // Convert to seconds
+  lastTime = currentTime;
+
+  // Update controls
   controls.update(); // Smooth camera control
+
+  // Animate clouds
   animateClouds(clouds); // Animate cloud movement
+
+  // Animate unicorn
+  unicorn.updateUnicornFlight(delta); // Pass delta to update flight and fairy dust
+
+  // Render the scene
   renderer.render(scene, camera);
 }
 animateMain(); // Start animation loop
@@ -81,8 +92,7 @@ animateMain(); // Start animation loop
 // 📏 === HANDLE WINDOW RESIZE ===
 handleResize(scene, renderer, camera);
 
-
-// 🎮 === ADD EVENT LISTENER FOR TOGGLE BUTTON
+// 🎮 === ADD EVENT LISTENER FOR TOGGLE BUTTON ===
 document.getElementById('toggleButton').addEventListener('click', () => {
   toggleSunMoon(scene);
 });

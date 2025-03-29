@@ -9,7 +9,7 @@ import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
 import { createIslandWithTexture } from './objects/mountains.js';
 import { createWaterOnIsland, createWaterfalls, createRockBorder } from './objects/water.js';
-
+import { addButterfliesToIsland } from "./objects/butterfly.js";
 
 
 // 🎨 === INITIAL SETUP ===
@@ -75,6 +75,9 @@ createRockBorder(water);
 
 const waterfalls = createWaterfalls();
 island.add(waterfalls);
+
+// 🦋 === ADD MAGICAL BUTTERFLIES ===
+addButterfliesToIsland(island);
 
 // 🦄 === ADD UNICORN ===
 const unicorn = new Unicorn();

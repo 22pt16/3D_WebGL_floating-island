@@ -1,15 +1,15 @@
 // vite.config.js
 import { defineConfig } from "vite";
-import path from "path";
+import { fileURLToPath, URL } from "url";
 
 export default defineConfig({
-  base: "./", //  For GitHub Pages, change if repo name is different
+  base: "./", //  Correct for GitHub Pages & Vercel
   build: {
-    outDir: "dist", // Build output folder
+    outDir: "dist", // 🔥 Build output to dist/
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"), //  Shortcut to /src
+      "@": fileURLToPath(new URL("./src", import.meta.url)), // 🚀 Correct way for Vite
     },
   },
 });

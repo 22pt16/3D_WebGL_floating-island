@@ -1,4 +1,13 @@
 import * as THREE from 'three';
+const bushTextureLoader = new THREE.TextureLoader();
+const bushTexture = bushTextureLoader.load("./bush.jpg")
+
+const grass = new THREE.TextureLoader();
+const grassTexture = grass.load("./grassland.jpg")
+
+const earth = new THREE.TextureLoader();
+const earthTexture =  earth.load("./earthsand.jpg")
+
 
 // 🎲 === UTILITY FUNCTIONS ===
 const randomize = (min, max, float = false) => {
@@ -29,15 +38,22 @@ export function createIsland() {
   const geoGround = new THREE.CylinderGeometry(9, 3, 13, 12, 5);
   jitter(geoGround, 0.85);
   geoGround.applyMatrix4(new THREE.Matrix4().makeTranslation(0, -0.5, 0)); // ✅ Corrected translate
-  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x664e31, flatShading: true });
+  const earthMaterial = new THREE.MeshPhongMaterial({ 
+    map:earthTexture,
+    color: 0xb07113, 
+    flatShading: true });
   const earth = new THREE.Mesh(geoGround, earthMaterial);
   islandGroup.add(earth);
 
   // --- 🌿 Green Top Layer
-  const geoGreen = new THREE.CylinderGeometry(8.5, 6, 7.5, 50, 2);
+  const geoGreen = new THREE.CylinderGeometry(8.5, 6, 7.5, 90, 2);
   jitter(geoGreen, 0.3);
-  geoGreen.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 3.1, 0)); // ✅ Corrected translate
-  const greenMaterial = new THREE.MeshPhongMaterial({ color: 0x379351, flatShading: true });
+  geoGreen.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 3.1, 0)); 
+  const greenMaterial = new THREE.MeshPhongMaterial({ 
+    map:grassTexture,
+    color: 0x56fc03, 
+    flatShading: true 
+  });
   const green = new THREE.Mesh(geoGreen, greenMaterial);
   islandGroup.add(green);
 
@@ -81,16 +97,19 @@ export function createIsland() {
 
 // 🌱 === ADD BUSHES AND GRASS ===
 const addBushesAndGrass = (islandGroup) => {
-  const bushMaterial = new THREE.MeshLambertMaterial({ color: 0x4c9c2e }); // Natural Green
+  const bushMaterial = new THREE.MeshLambertMaterial({ 
+    map: bushTexture,
+    color: 0x4c9c2e 
+  }); // Natural Green
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 40; i++) {
     const bushSize = randomize(0.4, 0.9, true);
     const geoBush = new THREE.SphereGeometry(bushSize, 6, 6); // Spherical bushes
     const bush = new THREE.Mesh(geoBush, bushMaterial);
 
     // Randomize bush position on top layer
     const angle = Math.random() * Math.PI * 2;
-    const radius = randomize(3.2, 6.8, true);
+    const radius = randomize(5, 8, true);
     bush.position.set(
       Math.cos(angle) * radius,
       7 + Math.random() * 0.2, // Slight variation in height

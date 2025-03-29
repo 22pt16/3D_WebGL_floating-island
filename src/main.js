@@ -7,7 +7,8 @@ import { setupBackground, handleResize, toggleSunMoon } from './objects/bg.js';
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
-import { createMountains } from './objects/mountains.js';
+import { createIslandWithTexture } from './objects/mountains.js';
+import { createWaterOnIsland, createWaterfalls, createRockBorder } from './objects/water.js';
 
 
 
@@ -60,9 +61,20 @@ if (island) {
 
 
 // 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===
-const mountains = createMountains(scene);
-scene.add(mountains);
-console.log('🏔️ Mountains added:', mountains);
+//const mountains = createIslandWithTexture();
+//scene.add(mountains);
+//console.log('🏔️ Mountains added:', mountains);
+
+
+// 🌊 === ADD WATER AND WATERFALLS ===
+const water = createWaterOnIsland();
+island.add(water);
+
+// 💎 Add Rock Border
+createRockBorder(water);
+
+const waterfalls = createWaterfalls();
+island.add(waterfalls);
 
 // 🦄 === ADD UNICORN ===
 const unicorn = new Unicorn();
@@ -95,6 +107,14 @@ function animateMain() {
 
   // Render the scene
   renderer.render(scene, camera);
+
+  // === ANIMATE WATER UV ===
+  const elapsedTime = performance.now() * 0.0001; // Adjust speed
+  water.material.map.offset.y = -elapsedTime * 0.5; // Flowing down
+  waterfalls.children.forEach((wf) => {
+    wf.material.map.offset.y = -elapsedTime * 0.8; // Faster for waterfall effect
+  });
+
 }
 animateMain(); // Start animation loop
 

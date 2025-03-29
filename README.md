@@ -20,8 +20,8 @@ Welcome to **Floating Fantasy Island**, a 3D environment built using `Three.js` 
 
 ---
 
-## 📸 **Project Demo**
-![Floating Island Demo]()
+## 📸 **Live Demo**
+🚀 **Experience it here:** [Floating Fantasy Island 🌍✨](https://webgl-fantasy-floating-island.vercel.app/)
 ---
 
 ## 🚀 **Features We’re Adding Next!**

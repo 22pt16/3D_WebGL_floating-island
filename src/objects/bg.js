@@ -18,6 +18,21 @@ function setupBackground(scene) {
 
   // 🌞 === CREATE SUN AND MOON ===
   createSun(scene);
+
+  // 🌟 === CREATE GLOW SPRITE FOR SUN ===
+const glowTexture = createSunGlowTexture();
+const glowMaterial = new THREE.SpriteMaterial({
+  map: glowTexture,
+  transparent: true,
+  opacity: 0.9, // Glow intensity
+  blending: THREE.AdditiveBlending, // Enhance glow
+});
+
+// 🌞 === GLOW SPRITE AROUND SUN ===
+const glowSprite = new THREE.Sprite(glowMaterial);
+glowSprite.scale.set(30, 30, 1); // Larger than sun for aura effect
+sun.add(glowSprite); // Attach glow to follow sun rotation
+
 }
 
 // 🌞 === CREATE SUN AND MOON ===
@@ -50,6 +65,37 @@ function createSun(scene) {
 
   // 🌙 === CREATE MOON ===
   createMoon(scene);
+}
+
+// ✨ === CREATE CANVAS-BASED GLOW TEXTURE FOR SUN ===
+function createSunGlowTexture() {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 256; // High-res glow
+  canvas.width = size;
+  canvas.height = size;
+
+  // 🎨 Radial Gradient for Sun Glow
+  const gradient = ctx.createRadialGradient(
+    size / 2,
+    size / 2,
+    0,
+    size / 2,
+    size / 2,
+    size / 2
+  );
+
+  gradient.addColorStop(0, '#ffdd44'); // Bright yellow core
+  gradient.addColorStop(0.3, '#ffbb33'); // Warm yellow-orange mid
+  gradient.addColorStop(1, 'transparent'); // Fades out smoothly
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+
+  // 📸 Create Texture from Canvas
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
 }
 
 
@@ -208,16 +254,18 @@ function resetStarPosition(star) {
   star.material.opacity = 0.8;
 }
 
-// 🌊 === ADD OCEAN REFLECTION EFFECT ===
+// 🌊 === ADD OCEAN REFLECTION + DYNAMIC RIPPLE EFFECT ===
 function createOcean(scene) {
-  const waterGeo = new THREE.PlaneGeometry(250, 250, 80, 50);
+  const waterGeo = new THREE.PlaneGeometry(250, 260, 90, 64);
+
+  // 🟦 Original Reflective Water Material
   const waterMat = new THREE.MeshStandardMaterial({
-    color: 0x1e90ff,
+    color: 0x1e90ff, // Original water color
     transparent: true,
     opacity: 0.8,
     side: THREE.DoubleSide,
-    roughness: 0.1,
-    metalness: 0.9,
+    roughness: 0.1, // For slight blur on reflection
+    metalness: 0.8, // Enhance reflectivity for realistic shine
   });
 
   const ocean = new THREE.Mesh(waterGeo, waterMat);
@@ -225,27 +273,32 @@ function createOcean(scene) {
   ocean.position.y = -5;
   scene.add(ocean);
 
-  animateOcean(ocean);
+  // 🔥 Combine Original Look with Dynamic Ripple Animation
+  animateOceanRipples(ocean);
 }
-// 🌊 === ANIMATE OCEAN WAVE MOTION ===
-function animateOcean(ocean) {
+
+// 🌊 === ANIMATE OCEAN RIPPLE EFFECT (DISPLACEMENT) ===
+function animateOceanRipples(ocean) {
   const position = ocean.geometry.attributes.position;
-  const waveHeight = 0.5;
+  const waveHeight = 0.5; // Keep it subtle for a natural ripple
 
   function updateWaves() {
-    const time = Date.now() * 0.0005;
+    const time = Date.now() * 0.0005; // Control wave speed
 
     for (let i = 0; i < position.count; i++) {
       const x = position.getX(i);
       const y = position.getY(i);
+      const dist = Math.sqrt(x * x + y * y); // Distance from center for smooth ripple
+
+      // 🎯 Apply Sin Wave Motion for Ripples
       const z =
-        Math.sin(x * 0.1 + time) * waveHeight +
-        Math.cos(y * 0.1 + time) * waveHeight;
+        Math.sin(dist * 4.0 - time * 5.0) * waveHeight * 0.5 + // Main ripple
+        Math.cos(dist * 2.0 + time * 3.0) * waveHeight * 0.3; // Secondary ripple
 
       position.setZ(i, z);
     }
 
-    position.needsUpdate = true; // ✅ Update vertices
+    position.needsUpdate = true; // ✅ Update vertices dynamically
     requestAnimationFrame(updateWaves);
   }
   updateWaves();

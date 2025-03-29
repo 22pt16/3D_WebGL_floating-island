@@ -61,7 +61,7 @@ if (island) {
 
 
 // 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===
-//const mountains = createIslandWithTexture();
+const mountains = createIslandWithTexture();
 //scene.add(mountains);
 //console.log('🏔️ Mountains added:', mountains);
 

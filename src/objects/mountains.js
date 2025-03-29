@@ -65,7 +65,6 @@ export function createIslandWithTexture() {
   // === 🌿 Textured Top Layer ===
   const geoTop = new THREE.CylinderGeometry(8.5, 6, 7.5, 50, 2);
   const terrainMaterial = new THREE.MeshStandardMaterial({
-    map: texture,
     flatShading: true,
   });
 

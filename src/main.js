@@ -3,7 +3,16 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Import Modules
-import { setupBackground, handleResize, toggleSunMoon } from './objects/bg.js';
+import {
+  setupBackground,
+  handleResize,
+  toggleSunMoon,
+  addNebula, // 🌌 Nebula Clouds
+  createShootingStar, // 🌠 Shooting Stars
+  createLightning, // ⛈️ Lightning
+  createOcean, // 🌊 Ocean Waves
+} from './objects/bg.js';
+
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
 import { Unicorn } from './objects/unicorn.js';
@@ -58,6 +67,9 @@ if (island) {
 } else {
   console.error('❌ Island failed to load!');
 }
+// 🌊 === ADD OCEAN REFLECTION EFFECT ===
+createOcean(scene);
+
 
 
 // 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===

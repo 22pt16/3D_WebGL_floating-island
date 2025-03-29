@@ -1,8 +1,9 @@
 // Import Three.js
 import * as THREE from 'three';
 
+
 // 🌌 === SETUP GRADIENT BACKGROUND + SUN ===
-export function setupBackground(scene) {
+function setupBackground(scene) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
@@ -116,11 +117,144 @@ function createMoonGlowTexture() {
   return texture;
 }
 
+// 🌌 === ADD NEBULA CLOUDS FOR NIGHT MODE ===
+function addNebula(scene) {
+  const nebulaTexture = new THREE.TextureLoader().load('./nebula.png');
+  const nebulaMaterial = new THREE.SpriteMaterial({
+    map: nebulaTexture,
+    transparent: true,
+    opacity: 0.5,
+    blending: THREE.AdditiveBlending,
+  });
+
+  for (let i = 0; i < 5; i++) {
+    const nebula = new THREE.Sprite(nebulaMaterial);
+    nebula.position.set(
+      randomize(-50, 50, true),
+      randomize(30, 50, true),
+      randomize(-80, -100, true)
+    );
+    nebula.scale.set(randomize(40, 60, true), randomize(40, 60, true), 1);
+
+    scene.add(nebula);
+    animateNebula(nebula);
+  }
+}
+
+// 🌌 === ANIMATE NEBULA SWIRLING ===
+function animateNebula(nebula) {
+  function moveNebula() {
+    nebula.position.x += Math.sin(Date.now() * 0.0001) * 0.02;
+    nebula.position.y += Math.cos(Date.now() * 0.0001) * 0.02;
+    requestAnimationFrame(moveNebula);
+  }
+  moveNebula();
+}
+
+// ⛈️ === ADD LIGHTNING EFFECT DURING STORMS ===
+function createLightning(scene) {
+  const lightningGeo = new THREE.PlaneGeometry(20, 100);
+  const lightningMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0,
+  });
+
+  const lightning = new THREE.Mesh(lightningGeo, lightningMat);
+  lightning.position.set(0, 50, -80);
+  scene.add(lightning);
+
+  function flashLightning() {
+    if (Math.random() > 0.98) {
+      lightning.material.opacity = 0.8;
+      setTimeout(() => {
+        lightning.material.opacity = 0;
+      }, 100);
+    }
+    requestAnimationFrame(flashLightning);
+  }
+  flashLightning();
+}
+
+// 🌠 === ADD SHOOTING STARS ===
+function createShootingStar(scene) {
+  const starGeo = new THREE.PlaneGeometry(0.5, 0.5);
+  const starMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.8,
+  });
+
+  const star = new THREE.Mesh(starGeo, starMat);
+  resetStarPosition(star);
+  scene.add(star);
+
+  function moveStar() {
+    star.position.y -= 0.5;
+    star.position.x -= 0.2;
+    star.material.opacity -= 0.01;
+
+    if (star.position.y < -30 || star.material.opacity <= 0) {
+      resetStarPosition(star);
+    }
+    requestAnimationFrame(moveStar);
+  }
+  moveStar();
+}
+
+// 🌠 === RESET STAR POSITION FOR RANDOM SHOOTING ===
+function resetStarPosition(star) {
+  star.position.set(randomize(-50, 50, true), randomize(30, 70, true), randomize(-80, -100, true));
+  star.material.opacity = 0.8;
+}
+
+// 🌊 === ADD OCEAN REFLECTION EFFECT ===
+function createOcean(scene) {
+  const waterGeo = new THREE.PlaneGeometry(250, 250, 80, 50);
+  const waterMat = new THREE.MeshStandardMaterial({
+    color: 0x1e90ff,
+    transparent: true,
+    opacity: 0.8,
+    side: THREE.DoubleSide,
+    roughness: 0.1,
+    metalness: 0.9,
+  });
+
+  const ocean = new THREE.Mesh(waterGeo, waterMat);
+  ocean.rotation.x = -Math.PI / 2;
+  ocean.position.y = -5;
+  scene.add(ocean);
+
+  animateOcean(ocean);
+}
+// 🌊 === ANIMATE OCEAN WAVE MOTION ===
+function animateOcean(ocean) {
+  const position = ocean.geometry.attributes.position;
+  const waveHeight = 0.5;
+
+  function updateWaves() {
+    const time = Date.now() * 0.0005;
+
+    for (let i = 0; i < position.count; i++) {
+      const x = position.getX(i);
+      const y = position.getY(i);
+      const z =
+        Math.sin(x * 0.1 + time) * waveHeight +
+        Math.cos(y * 0.1 + time) * waveHeight;
+
+      position.setZ(i, z);
+    }
+
+    position.needsUpdate = true; // ✅ Update vertices
+    requestAnimationFrame(updateWaves);
+  }
+  updateWaves();
+}
 
 
 
 // 🌗 === TOGGLE DAY AND NIGHT MODE ===
-export function toggleSunMoon(scene) {
+function toggleSunMoon(scene) {
   isDay = !isDay;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -182,10 +316,21 @@ function createNightBackground(ctx, canvas) {
 }
 
 // 📏 === HANDLE WINDOW RESIZE ===
-export function handleResize(scene, renderer, camera) {
+function handleResize(scene, renderer, camera) {
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 }
+
+// Export all background functions
+export {
+  setupBackground,
+  handleResize,
+  toggleSunMoon,
+  addNebula,
+  createShootingStar,
+  createLightning,
+  createOcean,
+};

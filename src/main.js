@@ -91,9 +91,7 @@ island.add(waterfalls);
 // 🦋 === ADD MAGICAL BUTTERFLIES ===
 addButterfliesToIsland(island);
 
-// 🦄 === ADD UNICORN ===
-const unicorn = new Unicorn();
-unicorn.addToScene(scene);
+
 
 // ☁️ === ADD CLOUDS ===
 let clouds = []; // Array to hold cloud meshes
@@ -117,8 +115,7 @@ function animateMain() {
   // Animate clouds
   animateClouds(clouds); // Animate cloud movement
 
-  // Animate unicorn
-  unicorn.updateUnicornFlight(delta); // Pass delta to update flight and fairy dust
+  
 
   // Render the scene
   renderer.render(scene, camera);

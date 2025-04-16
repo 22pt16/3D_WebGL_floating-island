@@ -2,7 +2,7 @@
 # 🌌✨ **Floating Fantasy Island: A Magical 3D Adventure** 🏝️⚡
 
 > 🌊 **Experience a breathtaking floating island with dynamic day & night cycles, realistic ocean ripples, glowing sun & moon, and vibrant animations!** 🌞🌙  
-> 🌈 **Switch between day and night to see colorful rainbows, mesmerizing fireworks, and a boat gracefully floating around the island.** 🚤✨  
+> 🌈 **Switch between day and night.** 🚤✨  
 
 ---
 
@@ -14,9 +14,6 @@ Welcome to **Floating Fantasy Island**, a 3D environment built using `Three.js` 
 ✅ Realistic Water Ripple Simulation 🌊💦  
 ✅ Swirling Nebula Clouds for Night Mode 🌌☁️  
 ✅ Shooting Stars and Lightning Effects ⚡🌠  
-✅ Fireworks at Night 🎆🎇  
-✅ Rainbows and Flowers in Day Mode 🌈🌸  
-✅ A Boat Sailing Through the Ocean 🚤  
 
 ---
 
@@ -40,9 +37,6 @@ Welcome to **Floating Fantasy Island**, a 3D environment built using `Three.js` 
 | --------------------- | -------------------------------------- |
 | 🌞 Sun & Moon         | Dynamic glow, day/night transitions  |
 | 🌊 Ocean              | Realistic water ripples & reflections |
-| 🎆 Fireworks           | Randomized night-time fireworks      |
-| 🌈 Rainbow & Flowers  | Day-time blooming and vibrant colors |
-| 🚤 Boat               | Smooth floating path through the waves |
 
 ---
 

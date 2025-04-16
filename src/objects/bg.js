@@ -2,24 +2,24 @@
 import * as THREE from 'three';
 
 
-// 🌌 === SETUP GRADIENT BACKGROUND + SUN ===
+// === SETUP GRADIENT BACKGROUND + SUN ===
 function setupBackground(scene) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
-  // 🎨 GRADIENT BACKGROUND (Sky to Deep Blue for Day)
+  //  GRADIENT BACKGROUND (Sky to Deep Blue for Day)
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   createDayBackground(ctx, canvas);
 
-  // 🌌 APPLY AS TEXTURE BACKGROUND
+  //  APPLY AS TEXTURE BACKGROUND
   const texture = new THREE.CanvasTexture(canvas);
   scene.background = texture;
 
-  // 🌞 === CREATE SUN AND MOON ===
+  // === CREATE SUN AND MOON ===
   createSun(scene);
 
-  // 🌟 === CREATE GLOW SPRITE FOR SUN ===
+  //  === CREATE GLOW SPRITE FOR SUN ===
 const glowTexture = createSunGlowTexture();
 const glowMaterial = new THREE.SpriteMaterial({
   map: glowTexture,
@@ -28,17 +28,17 @@ const glowMaterial = new THREE.SpriteMaterial({
   blending: THREE.AdditiveBlending, // Enhance glow
 });
 
-// 🌞 === GLOW SPRITE AROUND SUN ===
+//  === GLOW SPRITE AROUND SUN ===
 const glowSprite = new THREE.Sprite(glowMaterial);
 glowSprite.scale.set(30, 30, 1); // Larger than sun for aura effect
 sun.add(glowSprite); // Attach glow to follow sun rotation
 
 }
 
-// 🌞 === CREATE SUN AND MOON ===
+//  === CREATE SUN AND MOON ===
 let sun, moon, sunLight, ambientLight, isDay = true;
 
-// 🌞 === SUN CREATION ===
+//  === SUN CREATION ===
 function createSun(scene) {
   const sunGeometry = new THREE.SphereGeometry(8, 32, 32);
   const sunMaterial = new THREE.MeshStandardMaterial({
@@ -52,22 +52,22 @@ function createSun(scene) {
   sun = new THREE.Mesh(sunGeometry, sunMaterial);
   sun.position.set(0, 30, -60); // Set Sun's Position
 
-  // 💡 Sunlight Simulation
+  //  Sunlight Simulation
   sunLight = new THREE.PointLight(0xffddaa, 2.5, 600);
   sunLight.position.copy(sun.position);
 
-  // 🌥️ Soft Ambient Light for Day
+  //  Soft Ambient Light for Day
   ambientLight = new THREE.AmbientLight(0xfff0e0, 0.5);
 
   scene.add(sun);
   scene.add(sunLight);
   scene.add(ambientLight);
 
-  // 🌙 === CREATE MOON ===
+  //  === CREATE MOON ===
   createMoon(scene);
 }
 
-// ✨ === CREATE CANVAS-BASED GLOW TEXTURE FOR SUN ===
+//  === CREATE CANVAS-BASED GLOW TEXTURE FOR SUN ===
 function createSunGlowTexture() {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -75,7 +75,7 @@ function createSunGlowTexture() {
   canvas.width = size;
   canvas.height = size;
 
-  // 🎨 Radial Gradient for Sun Glow
+  //  Radial Gradient for Sun Glow
   const gradient = ctx.createRadialGradient(
     size / 2,
     size / 2,
@@ -99,9 +99,9 @@ function createSunGlowTexture() {
 }
 
 
-// 🌙 === CREATE GLOWING MOON WITH DYNAMIC GLOW EFFECT ===
+//  === CREATE GLOWING MOON WITH DYNAMIC GLOW EFFECT ===
 function createMoon(scene) {
-  // 🌕 Main Moon Geometry
+  //  Main Moon Geometry
   const moonGeometry = new THREE.SphereGeometry(8, 32, 32);
   const moonMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff, // Bright white moon
@@ -111,13 +111,13 @@ function createMoon(scene) {
     metalness: 0.1,
   });
 
-  // 🌕 Main Moon Mesh
+  //  Main Moon Mesh
   moon = new THREE.Mesh(moonGeometry, moonMaterial);
   moon.position.set(0, 30, -60);
   moon.visible = false; // Hide initially
   scene.add(moon);
 
-  // ✨ === CREATE GLOW TEXTURE FROM CANVAS ===
+  //  === CREATE GLOW TEXTURE FROM CANVAS ===
   const glowTexture = createMoonGlowTexture(); // Generate texture dynamically
   const glowMaterial = new THREE.SpriteMaterial({
     map: glowTexture,
@@ -126,13 +126,13 @@ function createMoon(scene) {
     blending: THREE.AdditiveBlending, // Enhance glow
   });
 
-  // 🔥 === GLOW SPRITE AS AURA AROUND MOON ===
+  //  === GLOW SPRITE AS AURA AROUND MOON ===
   const glowSprite = new THREE.Sprite(glowMaterial);
   glowSprite.scale.set(20, 20, 1); // Slightly larger than moon
   moon.add(glowSprite); // Add glow to follow moon rotation
 }
 
-// ✨ === CREATE CANVAS-BASED GLOW TEXTURE ===
+// === CREATE CANVAS-BASED GLOW TEXTURE ===
 function createMoonGlowTexture() {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -140,7 +140,7 @@ function createMoonGlowTexture() {
   canvas.width = size;
   canvas.height = size;
 
-  // 🎨 Radial Gradient like the Original
+  // Radial Gradient like the Original
   const gradient = ctx.createRadialGradient(
     size / 2,
     size / 2,
@@ -157,13 +157,13 @@ function createMoonGlowTexture() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, size, size);
 
-  // 📸 Create Texture from Canvas
+  //  Create Texture from Canvas
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
   return texture;
 }
 
-// 🌌 === ADD NEBULA CLOUDS FOR NIGHT MODE ===
+//  === ADD NEBULA CLOUDS FOR NIGHT MODE ===
 function addNebula(scene) {
   const nebulaTexture = new THREE.TextureLoader().load('./nebula.png');
   const nebulaMaterial = new THREE.SpriteMaterial({
@@ -187,7 +187,7 @@ function addNebula(scene) {
   }
 }
 
-// 🌌 === ANIMATE NEBULA SWIRLING ===
+//  === ANIMATE NEBULA SWIRLING ===
 function animateNebula(nebula) {
   function moveNebula() {
     nebula.position.x += Math.sin(Date.now() * 0.0001) * 0.02;
@@ -197,7 +197,7 @@ function animateNebula(nebula) {
   moveNebula();
 }
 
-// ⛈️ === ADD LIGHTNING EFFECT DURING STORMS ===
+// === ADD LIGHTNING EFFECT DURING STORMS ===
 function createLightning(scene) {
   const lightningGeo = new THREE.PlaneGeometry(20, 100);
   const lightningMat = new THREE.MeshBasicMaterial({
@@ -222,7 +222,7 @@ function createLightning(scene) {
   flashLightning();
 }
 
-// 🌠 === ADD SHOOTING STARS ===
+//  === ADD SHOOTING STARS ===
 function createShootingStar(scene) {
   const starGeo = new THREE.PlaneGeometry(0.5, 0.5);
   const starMat = new THREE.MeshBasicMaterial({
@@ -248,17 +248,17 @@ function createShootingStar(scene) {
   moveStar();
 }
 
-// 🌠 === RESET STAR POSITION FOR RANDOM SHOOTING ===
+//  === RESET STAR POSITION FOR RANDOM SHOOTING ===
 function resetStarPosition(star) {
   star.position.set(randomize(-50, 50, true), randomize(30, 70, true), randomize(-80, -100, true));
   star.material.opacity = 0.8;
 }
 
-// 🌊 === ADD OCEAN REFLECTION + DYNAMIC RIPPLE EFFECT ===
+// === ADD OCEAN REFLECTION + DYNAMIC RIPPLE EFFECT ===
 function createOcean(scene) {
   const waterGeo = new THREE.PlaneGeometry(250, 260, 90, 64);
 
-  // 🟦 Original Reflective Water Material
+  // Original Reflective Water Material
   const waterMat = new THREE.MeshStandardMaterial({
     color: 0x1e90ff, // Original water color
     transparent: true,
@@ -273,11 +273,11 @@ function createOcean(scene) {
   ocean.position.y = -5;
   scene.add(ocean);
 
-  // 🔥 Combine Original Look with Dynamic Ripple Animation
+  //  Combine Original Look with Dynamic Ripple Animation
   animateOceanRipples(ocean);
 }
 
-// 🌊 === ANIMATE OCEAN RIPPLE EFFECT (DISPLACEMENT) ===
+//  === ANIMATE OCEAN RIPPLE EFFECT (DISPLACEMENT) ===
 function animateOceanRipples(ocean) {
   const position = ocean.geometry.attributes.position;
   const waveHeight = 0.5; // Keep it subtle for a natural ripple
@@ -290,7 +290,7 @@ function animateOceanRipples(ocean) {
       const y = position.getY(i);
       const dist = Math.sqrt(x * x + y * y); // Distance from center for smooth ripple
 
-      // 🎯 Apply Sin Wave Motion for Ripples
+      //  Apply Sin Wave Motion for Ripples
       const z =
         Math.sin(dist * 4.0 - time * 5.0) * waveHeight * 0.5 + // Main ripple
         Math.cos(dist * 2.0 + time * 3.0) * waveHeight * 0.3; // Secondary ripple
@@ -298,7 +298,7 @@ function animateOceanRipples(ocean) {
       position.setZ(i, z);
     }
 
-    position.needsUpdate = true; // ✅ Update vertices dynamically
+    position.needsUpdate = true; //  Update vertices dynamically
     requestAnimationFrame(updateWaves);
   }
   updateWaves();
@@ -306,7 +306,7 @@ function animateOceanRipples(ocean) {
 
 
 
-// 🌗 === TOGGLE DAY AND NIGHT MODE ===
+//  === TOGGLE DAY AND NIGHT MODE ===
 function toggleSunMoon(scene) {
   isDay = !isDay;
   const canvas = document.createElement('canvas');
@@ -315,14 +315,14 @@ function toggleSunMoon(scene) {
   canvas.height = window.innerHeight;
 
   if (isDay) {
-    // 🌞 Switch to Day Mode
+    //  Switch to Day Mode
     sun.visible = true;
     moon.visible = false;
     sunLight.intensity = 2.5;
     ambientLight.intensity = 0.5;
     createDayBackground(ctx, canvas);
   } else {
-    // 🌙 Switch to Night Mode
+    //  Switch to Night Mode
     sun.visible = false;
     moon.visible = true;
     sunLight.intensity = 1.2; // Dimmer glow for moonlight
@@ -333,12 +333,12 @@ function toggleSunMoon(scene) {
 
   }
 
-  // 🌌 Update Background Texture
+  // Update Background Texture
   const texture = new THREE.CanvasTexture(canvas);
   scene.background = texture;
 }
 
-// 🎨 === DAY BACKGROUND ===
+// === DAY BACKGROUND ===
 function createDayBackground(ctx, canvas) {
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, '#87CEEB'); // Sky Blue
@@ -347,7 +347,7 @@ function createDayBackground(ctx, canvas) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// 🌌 === NIGHT BACKGROUND WITH MOON GRADIENT ===
+// === NIGHT BACKGROUND WITH MOON GRADIENT ===
 function createNightBackground(ctx, canvas) {
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, '#0c1445'); // Deep Space Blue
@@ -356,7 +356,7 @@ function createNightBackground(ctx, canvas) {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // ✨ Add Stars for Extra Realism
+  //  Add Stars for Extra Realism
   for (let i = 0; i < 150; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
@@ -368,7 +368,7 @@ function createNightBackground(ctx, canvas) {
 
 }
 
-// 📏 === HANDLE WINDOW RESIZE ===
+//  === HANDLE WINDOW RESIZE ===
 function handleResize(scene, renderer, camera) {
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;

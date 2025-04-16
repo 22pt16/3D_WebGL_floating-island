@@ -15,7 +15,7 @@ function createMountainsOnIsland(islandGroup) {
   const mountainGroup = new THREE.Group();
 
   for (let i = 0; i < 8; i++) {
-    // --- 🪨 Mountain Geometry
+    // --- Mountain Geometry
     const mountainHeight = randomize(4, 8, true);
     const geoMountain = new THREE.ConeGeometry(
       randomize(.8, 2.8, true), // Base radius
@@ -25,7 +25,7 @@ function createMountainsOnIsland(islandGroup) {
     // === LOAD NEW TEXTURE FOR MOUNTAINS ===
     const rockTexture = loader.load("./mountain.jpg");
 
-    // --- 🎨 Mountain Material
+    // --- Mountain Material
     const mountainMaterial = new THREE.MeshStandardMaterial({
       map: rockTexture, // Using the same texture
       flatShading: true,
@@ -33,7 +33,7 @@ function createMountainsOnIsland(islandGroup) {
 
     const mountain = new THREE.Mesh(geoMountain, mountainMaterial);
 
-    // --- ⛰️ Positioning Mountains Randomly
+    // --- Positioning Mountains Randomly
     const angle = Math.random() * Math.PI * 2; // Circular spread
     const radius = randomize(3, 6, true); // Distance from center
     mountain.position.set(
@@ -53,7 +53,7 @@ function createMountainsOnIsland(islandGroup) {
 export function createIslandWithTexture() {
   const islandGroup = new THREE.Group();
 
-  // === 🪨 Ground (Base Island) ===
+  // === Ground (Base Island) ===
   const geoGround = new THREE.CylinderGeometry(9, 3, 13, 12, 5);
   const earthMaterial = new THREE.MeshPhongMaterial({
     color: 0x664e31,
@@ -62,7 +62,7 @@ export function createIslandWithTexture() {
   const earth = new THREE.Mesh(geoGround, earthMaterial);
   islandGroup.add(earth);
 
-  // === 🌿 Textured Top Layer ===
+  // === Textured Top Layer ===
   const geoTop = new THREE.CylinderGeometry(8.5, 6, 7.5, 50, 2);
   const terrainMaterial = new THREE.MeshStandardMaterial({
     flatShading: true,
@@ -72,7 +72,7 @@ export function createIslandWithTexture() {
   terrain.position.y = 3.2; // Positioned slightly above the island
   islandGroup.add(terrain);
 
-  // === 🏔️ Add Mountains on the Island ===
+  // === Add Mountains on the Island ===
   createMountainsOnIsland(islandGroup);
 
   // === POSITIONING & SCALING ===

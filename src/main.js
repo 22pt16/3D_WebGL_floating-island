@@ -15,7 +15,6 @@ import {
 
 import { createIsland } from './objects/island.js';
 import { createClouds, animateClouds } from './objects/clouds.js';
-import { Unicorn } from './objects/unicorn.js';
 import { createIslandWithTexture } from './objects/mountains.js';
 import { createWaterOnIsland, createWaterfalls, createRockBorder } from './objects/water.js';
 import { addButterfliesToIsland } from "./objects/butterfly.js";
@@ -63,39 +62,37 @@ handleResize(scene, renderer, camera);
 const island = createIsland();
 scene.add(island);
 if (island) {
-  console.log('✅ Island loaded successfully!');
+  console.log(' Island loaded successfully!');
 } else {
-  console.error('❌ Island failed to load!');
+  console.error(' Island failed to load!');
 }
 //=== ADD OCEAN REFLECTION EFFECT ===
 createOcean(scene);
 
-// 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===
+// === ADD MOUNTAINS AROUND THE ISLAND ===
 const mountains = createIslandWithTexture();
 //scene.add(mountains);
-//console.log('🏔️ Mountains added:', mountains);
 
-
-// 🌊 === ADD WATER AND WATERFALLS ===
+//  === ADD WATER AND WATERFALLS ===
 const water = createWaterOnIsland();
 island.add(water);
 
-// 💎 Add Rock Border
+//  Add Rock Border
 createRockBorder(water);
 
 const waterfalls = createWaterfalls();
-island.add(waterfalls);
+//island.add(waterfalls);
 
-// 🦋 === ADD MAGICAL BUTTERFLIES ===
+// === ADD MAGICAL BUTTERFLIES ===
 addButterfliesToIsland(island);
 
 
 
-// ☁️ === ADD CLOUDS ===
+//  === ADD CLOUDS ===
 let clouds = []; // Array to hold cloud meshes
 createClouds(scene, clouds); // Create cloud objects and push to array
 
-// 🎥 === ANIMATION LOOP ===
+//  === ANIMATION LOOP ===
 // Initialize time for delta calculation
 let lastTime = performance.now();
 
@@ -113,7 +110,6 @@ function animateMain() {
   // Animate clouds
   animateClouds(clouds); // Animate cloud movement
 
-  
 
   // Render the scene
   renderer.render(scene, camera);
@@ -128,10 +124,10 @@ function animateMain() {
 }
 animateMain(); // Start animation loop
 
-// 📏 === HANDLE WINDOW RESIZE ===
+// === HANDLE WINDOW RESIZE ===
 handleResize(scene, renderer, camera);
 
-// 🎮 === ADD EVENT LISTENER FOR TOGGLE BUTTON ===
+// === ADD EVENT LISTENER FOR TOGGLE BUTTON ===
 document.getElementById('toggleButton').addEventListener('click', () => {
   toggleSunMoon(scene);
 });

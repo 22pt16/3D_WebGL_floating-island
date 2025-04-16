@@ -1,35 +1,13 @@
 import * as THREE from "three";
 
-// 🎲 === UTILITY FUNCTIONS ===
+// === UTILITY FUNCTIONS ===
 const randomize = (min, max, float = false) => {
   const val = Math.random() * (max - min) + min;
   return float ? val : Math.floor(val);
 };
 
-// ✨ === CREATE BUTTERFLY TRAIL PARTICLES ===
-const createTrail = (color) => {
-  const particles = 15;
-  const trailGeometry = new THREE.BufferGeometry();
-  const trailMaterial = new THREE.PointsMaterial({
-    color: color,
-    size: 0.1,
-    transparent: true,
-    opacity: 0.7,
-    blending: THREE.AdditiveBlending
-  });
 
-  const positions = new Float32Array(particles * 3);
-  for (let i = 0; i < particles; i++) {
-    positions[i * 3] = 0;
-    positions[i * 3 + 1] = 0;
-    positions[i * 3 + 2] = 0;
-  }
-
-  trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  return new THREE.Points(trailGeometry, trailMaterial);
-};
-
-// 🦋 === CREATE REALISTIC BUTTERFLY WING SHAPE ===
+// === CREATE REALISTIC BUTTERFLY WING SHAPE ===
 const createWingShape = () => {
   const shape = new THREE.Shape();
   shape.moveTo(0, 0);
@@ -40,7 +18,7 @@ const createWingShape = () => {
   return shape;
 };
 
-// 🦋 === ADD COLORFUL BUTTERFLIES ===
+//  === ADD COLORS TO BUTTERFLIES ===
 export const addButterfliesToIsland = (islandGroup) => {
   const butterflyGroup = new THREE.Group();
   const colors = [0xff6347, 0xffa500, 0xffff00, 0x32cd32, 0x4169e1, 0x9370DB, 0xFF69B4, 0x00FFFF]; // Expanded color palette
@@ -58,8 +36,8 @@ export const addButterfliesToIsland = (islandGroup) => {
     // === CREATE REALISTIC WINGS ===
     const wingShape = createWingShape();
     const wingGeo = new THREE.ExtrudeGeometry(wingShape, {
-      depth: 0.03,
-      bevelEnabled: false,
+      depth: 0.03,// The distance to extrude the shape along the z-axis
+      bevelEnabled: true,
       steps: 1
     });
     
@@ -82,7 +60,7 @@ export const addButterfliesToIsland = (islandGroup) => {
         ctx.strokeStyle = 'rgba(0,0,0,0.3)';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.ellipse(150, 150, 50, 100, 0, 0, Math.PI * 2);
+        ctx.ellipse(150, 150, 50, 100, 0, 0, Math.PI * 2);//design in wings
         ctx.stroke();
       }
       
@@ -114,13 +92,7 @@ export const addButterfliesToIsland = (islandGroup) => {
     butterfly.add(wingLeft);
     butterfly.add(wingRight);
 
-    // Add particle trail
-    const trail = createTrail(Math.random() > 0.5 ? color1 : color2);
-    butterfly.add(trail);
-    butterfly.userData.trail = trail;
-    butterfly.userData.trailIndex = 0;
-    butterfly.userData.trailPositions = trail.geometry.attributes.position.array;
-
+    
     // === RANDOM POSITION AND HEIGHT ===
     const angle = Math.random() * Math.PI * 2;
     const radius = randomize(10, 24, true);
@@ -154,7 +126,7 @@ export const addButterfliesToIsland = (islandGroup) => {
   animateButterflies(butterflyGroup);
 };
 
-// 🦋 === ANIMATE BUTTERFLY WINGS AND SMOOTH MOVEMENT ===
+// === ANIMATE BUTTERFLY WINGS AND SMOOTH MOVEMENT ===
 export const animateButterflies = (butterflyGroup) => {
   const clock = new THREE.Clock();
   const windDirection = new THREE.Vector3(
@@ -175,14 +147,14 @@ export const animateButterflies = (butterflyGroup) => {
     butterflyGroup.children.forEach((butterfly) => {
       const { userData } = butterfly;
       
-      // 🦋 Update wing flapping with more natural motion
+      //  Update wing flapping with more natural motion
       userData.wingPhase += userData.wingSpeed;
       const wingAngle = Math.sin(userData.wingPhase) * 0.5;
       
       butterfly.children[1].rotation.z = wingAngle + Math.PI/8;
       butterfly.children[2].rotation.z = -wingAngle - Math.PI/8;
 
-      // 🌀 Smooth circular orbit with wind influence
+      //  Smooth circular orbit with wind influence
       userData.angle += userData.speed * delta;
       
       // Calculate target position with wind effect
@@ -193,23 +165,23 @@ export const animateButterflies = (butterflyGroup) => {
       butterfly.position.x += (targetX - butterfly.position.x) * userData.smoothFactor;
       butterfly.position.z += (targetZ - butterfly.position.z) * userData.smoothFactor;
 
-      // 🌊 Vertical movement with smooth transitions
+      // Vertical movement with smooth transitions
       const heightVariation = Math.sin(time * userData.verticalOscillation + userData.heightOffset) * 0.8;
       const targetY = userData.targetHeight + heightVariation;
       butterfly.position.y += (targetY - butterfly.position.y) * userData.smoothFactor;
 
-      // 🌀 Spiral motion with occasional direction changes
+      //  Spiral motion with occasional direction changes
       if (Math.random() < 0.005) {
         userData.flightRadius += (Math.random() - 0.5) * 0.5;
         userData.flightRadius = Math.max(1, Math.min(15, userData.flightRadius));
       }
 
-      // 🎯 Randomly change target height for more organic movement
+      //  Randomly change target height for more organic movement
       if (Math.random() < 0.01) {
         userData.targetHeight = 8 + Math.random() * 3;
       }
 
-      // ✨ Update particle trail
+      //  Update particle trail
       if (userData.trail) {
         // Shift all particles back
         const positions = userData.trailPositions;
@@ -225,7 +197,7 @@ export const animateButterflies = (butterflyGroup) => {
         userData.trail.geometry.attributes.position.needsUpdate = true;
       }
 
-      // 🧭 Face the direction of movement
+      //  Face the direction of movement
       const lookAtPos = new THREE.Vector3(
         butterfly.position.x + Math.cos(userData.angle),
         butterfly.position.y,

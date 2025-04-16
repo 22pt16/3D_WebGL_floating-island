@@ -7,10 +7,10 @@ import {
   setupBackground,
   handleResize,
   toggleSunMoon,
-  addNebula, // 🌌 Nebula Clouds
-  createShootingStar, // 🌠 Shooting Stars
-  createLightning, // ⛈️ Lightning
-  createOcean, // 🌊 Ocean Waves
+  addNebula, 
+  createShootingStar, 
+  createLightning, 
+  createOcean, 
 } from './objects/bg.js';
 
 import { createIsland } from './objects/island.js';
@@ -21,8 +21,8 @@ import { createWaterOnIsland, createWaterfalls, createRockBorder } from './objec
 import { addButterfliesToIsland } from "./objects/butterfly.js";
 
 
-// 🎨 === INITIAL SETUP ===
-// Scene, Camera, and Renderer
+//INITIAL SETUP
+//Scene, Camera, and Renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   30,
@@ -35,16 +35,16 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// 🎮 === ORBIT CONTROLS ===
+//ORBIT CONTROLS
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Smooth camera rotation
+controls.enableDamping = true; //smooth camera rotation
 controls.dampingFactor = 0.1;
-controls.minDistance = 2; // Min Zoom-out distance
-controls.maxDistance = 150; // Max FAR Zoom-out distance
-controls.maxPolarAngle = Math.PI / 2; // Lock rotation to prevent looking below
-camera.position.set(35, 10, 18); // Closer to the island for a better view
+controls.minDistance = 2; //min Zoom-out distance
+controls.maxDistance = 150; //max FAR Zoom-out distance
+controls.maxPolarAngle = Math.PI / 2; //limit vertical rotation
+camera.position.set(35, 10, 18); //closer to the island for a better view
 
-// 💡 === LIGHT SETUP ===
+// LIGHT SETUP
 // Directional Light for Sunlight Effect
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(10, 20, 10).normalize();
@@ -55,11 +55,11 @@ scene.add(light);
 const ambientLight = new THREE.AmbientLight(0x404040, 2);
 scene.add(ambientLight);
 
-// 🌌 === BACKGROUND SETUP ===
+// === BACKGROUND SETUP ===
 setupBackground(scene);
 handleResize(scene, renderer, camera);
 
-// 🏝️ === ADD FLOATING ISLAND ===
+//=== ADD FLOATING ISLAND ===
 const island = createIsland();
 scene.add(island);
 if (island) {
@@ -67,10 +67,8 @@ if (island) {
 } else {
   console.error('❌ Island failed to load!');
 }
-// 🌊 === ADD OCEAN REFLECTION EFFECT ===
+//=== ADD OCEAN REFLECTION EFFECT ===
 createOcean(scene);
-
-
 
 // 🌄 === ADD MOUNTAINS AROUND THE ISLAND ===
 const mountains = createIslandWithTexture();

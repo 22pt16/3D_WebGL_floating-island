@@ -37,7 +37,7 @@ export const addButterfliesToIsland = (islandGroup) => {
     const wingShape = createWingShape();
     const wingGeo = new THREE.ExtrudeGeometry(wingShape, {
       depth: 0.03,// The distance to extrude the shape along the z-axis
-      bevelEnabled: true,
+      bevelEnabled: false,
       steps: 1
     });
     
